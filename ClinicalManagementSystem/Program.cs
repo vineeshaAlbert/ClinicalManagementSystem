@@ -1,31 +1,52 @@
 using ClinicalManagementSystem.Repository;
 using ClinicalManagementSystem.Service;
 
-var builder = WebApplication.CreateBuilder(args);
+namespace ClinicalManagementSystem
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
+            // ? Add services to the container
+            builder.Services.AddControllersWithViews();
+            builder.Services.AddSession(); // ? Enable session
+            builder.Services.AddHttpContextAccessor(); // ? Needed for session/context
 
-// Add session
-builder.Services.AddSession();
+            // ? Register repositories and services
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IUserService, UserService>();
 
-// Register services and repositories
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-builder.Services.AddScoped<IRoleService, RoleService>();
+            builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+            builder.Services.AddScoped<IRoleService, RoleService>();
 
+            builder.Services.AddScoped<IAdminRepository, AdminRepository>();
+            builder.Services.AddScoped<IAdminService, AdminService>();
 
-// Register configuration for connection string access
-var app = builder.Build();
+            // ? Build app
+            var app = builder.Build();
 
-app.UseStaticFiles();
-app.UseRouting();
-app.UseSession();
-app.UseAuthorization();
+            // ? Middleware pipeline
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
+            }
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Account}/{action=Login}/{id?}");
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
-app.Run();
+            app.UseRouting();
+            app.UseSession(); // ? Use session
+            app.UseAuthorization();
+
+            // ? Default route to Login controller
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Account}/{action=Login}/{id?}");
+
+            app.Run();
+        }
+    }
+}

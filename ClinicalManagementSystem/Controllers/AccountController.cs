@@ -23,33 +23,62 @@ namespace ClinicalManagementSystem.Controllers
         [HttpPost]
         public IActionResult Login(LoginViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
+                foreach (var err in ModelState.Values.SelectMany(v => v.Errors))
                 {
-                    var user = _userService.Login(model.Username, model.Password);
-                    if (user != null)
-                    {
-                        HttpContext.Session.SetString("Username", user.Username);
-                        HttpContext.Session.SetString("Role", user.RoleName);
-
-                        return user.RoleName switch
-                        {
-                            "Admin" => RedirectToAction("Dashboard", "Admin"),
-                            "Receptionist" => RedirectToAction("Dashboard", "Receptionist"),
-                            "Doctor" => RedirectToAction("Dashboard", "Doctor"),
-                            "LabTechnician" => RedirectToAction("Dashboard", "Lab"),
-                            "Pharmacist" => RedirectToAction("Dashboard", "Pharmacy"),
-                            _ => RedirectToAction("Login")
-                        };
-                    }
-                    ModelState.AddModelError("", "Invalid Username or Password");
+                    Console.WriteLine(err.ErrorMessage); // Log to console for debugging
                 }
-                catch (Exception ex)
+                return View(model);
+            }
+
+
+            try
+            {
+                var user = _userService.Login(model.Username, model.Password);
+
+                if (user != null)
                 {
-                    ModelState.AddModelError("", $"Error: {ex.Message}");
+                    // 💾 Store session
+                    HttpContext.Session.SetInt32("UserId", user.UserId);
+                    HttpContext.Session.SetString("Username", user.Username);
+                    HttpContext.Session.SetString("Role", user.RoleName);
+
+                    // ✅ Clean up role string
+                    string role = user.RoleName?.Trim().ToLower();
+
+                    switch (role)
+                    {
+                        case "admin":
+                            return RedirectToAction("Index", "Admin");
+
+                        case "receptionist":
+                            return RedirectToAction("Index", "Reception");
+
+                        case "doctor":
+                            return RedirectToAction("TodayAppointments", "Doctor", new { doctorId = user.UserId });
+
+                        case "pharmacist":
+                            return RedirectToAction("Index", "Pharmacist");
+
+                        case "lab":
+                            return RedirectToAction("Index", "Lab");
+
+                        default:
+                            ViewBag.Error = $"Unrecognized role: {user.RoleName}";
+                            break;
+                    }
+                }
+                else
+                {
+                    ViewBag.Error = "Invalid username or password.";
                 }
             }
+            catch (Exception ex)
+            {
+                ViewBag.Error = $"Login failed: {ex.Message}";
+            }
+
             return View(model);
         }
 

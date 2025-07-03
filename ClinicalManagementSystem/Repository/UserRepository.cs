@@ -5,7 +5,7 @@ using System.Data;
 
 namespace ClinicalManagementSystem.Repository
 {
-    public class UserRepository: IUserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly string _connectionString;
 
@@ -49,7 +49,7 @@ namespace ClinicalManagementSystem.Repository
             }
         }
 
-            public List<UserViewModel> GetAllUsers()
+        public List<UserViewModel> GetAllUsers()
         {
             var list = new List<UserViewModel>();
             using (SqlConnection conn = new SqlConnection(_connectionString))
@@ -75,7 +75,7 @@ namespace ClinicalManagementSystem.Repository
                 }
             }
             return list;
-        }
+        } 
 
         public void AddUser(UserViewModel user)
         {
