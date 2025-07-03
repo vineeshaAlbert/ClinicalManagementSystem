@@ -1,0 +1,103 @@
+﻿@model List<ClinicalManagementSystem.ViewModel.UserViewModel>
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+<link rel="stylesheet" href="~/css/user-admin.css" />
+
+<div class="container mt-4">
+    <h2>User Management</h2>
+
+    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addUserModal">Add New User</button>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success">@TempData["Message"]</div>
+    }
+
+    <table class="table table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>User ID</th>
+                <th>Emp ID</th>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Role</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.UserId</td>
+                    <td>@user.EmployeeId</td>
+                    <td>@user.Name</td>
+                    <td>@user.Username</td>
+                    <td>@user.RoleName</td>
+                    <td>
+                        <input type="checkbox" class="form-check-input toggle-active"
+                               data-user-id="@user.UserId"
+                               @(user.IsActive ? "checked" : "") />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal Form -->
+<div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <form asp-action="AddUser" method="post" class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add New User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="RoleId" class="form-label">Role</label>
+                    <select asp-for="RoleId" class="form-select" id="RoleDropdown">
+                        <option disabled selected>Select Role</option>
+                    </select>
+                    <span asp-validation-for="RoleId" class="text-danger"></span>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" name="IsActive" checked />
+                    <label class="form-check-label">Active</label>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success">Save User</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            // Load roles into dropdown
+            $.getJSON('/Admin/GetRoles', function (data) {
+                $.each(data, function (i, item) {
+                    $('#RoleDropdown').append($('<option>', {
+                        value: item.value,
+                        text: item.text
+                    }));
+                });
+            });
+
+            // Toggle active status
+            $('.toggle-active').change(function () {
+                var userId = $(this).data('user-id');
+                var isActive = $(this).is(':checked');
+                $.post('/Admin/ToggleStatus', { userId: userId, isActive: isActive });
+            });
+        });
+    </script>
+}

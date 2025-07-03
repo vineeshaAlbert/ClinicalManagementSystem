@@ -1,0 +1,69 @@
+﻿@{
+    var path = Context.Request.Path.Value.ToLower();
+    var isLoginPage = path.Contains("/account/login");
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] - MediCareCMS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap & CSS -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <!-- Optional: Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
+    <style>
+        body {
+            background: linear-gradient(to right, #f0f2f5, #dfe9f3);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .main-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .card-custom {
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer-mini {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #777;
+            margin-top: 20px;
+        }
+
+        /* Hide footer on login page */
+        .footer-mini.hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        @RenderBody()
+    </div>
+
+    <div class="footer-mini @(isLoginPage ? "hidden" : "")">
+        © 2025 MediCareCMS • Your Health, Our Promise
+    </div>
+
+    <!-- Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
