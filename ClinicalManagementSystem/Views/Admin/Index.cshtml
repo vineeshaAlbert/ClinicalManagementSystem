@@ -1,31 +1,126 @@
 ﻿@model List<ClinicalManagementSystem.ViewModel.UserViewModel>
+
 @{
     ViewData["Title"] = "Admin Dashboard";
 }
-<link rel="stylesheet" href="~/css/user-admin.css" />
 
-<h2 class="text-center my-4">Admin Dashboard</h2>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
 
-<div class="container text-center">
-    <div class="row g-4">
-        <div class="col-md-3">
-            <a href="/Admin/ManageReceptionists" class="btn btn-outline-primary w-100 py-3">👩 Receptionists</a>
-        </div>
-        <div class="col-md-3">
-            <a href="/Admin/ManageDoctors" class="btn btn-outline-success w-100 py-3">👨‍⚕️ Doctors</a>
-        </div>
-        <div class="col-md-3">
-            <a href="/Admin/ManagePharmacists" class="btn btn-outline-warning w-100 py-3">💊 Pharmacists</a>
-        </div>
-        <div class="col-md-3">
-            <a href="/Admin/ManageLabTechnicians" class="btn btn-outline-info w-100 py-3">🔬 Lab Technicians</a>
-        </div>
+<style>
+    /* Purple gradient background */
+    html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: 'Inter', sans-serif;
+        background: linear-gradient(to bottom right, #f3e5f5, #ce93d8, #ab47bc);
+    }
+
+    .admin-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .logo img {
+        width: 250px;
+        height: auto;
+        margin-bottom: 20px;
+    }
+
+    .dashboard-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #4a148c;
+        margin-bottom: 30px;
+    }
+
+    .dashboard-buttons {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 20px;
+        width: 100%;
+        max-width: 800px;
+    }
+
+    .btn-tile {
+        display: inline-block;
+        padding: 16px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        border-radius: 10px;
+        color: white;
+        text-decoration: none;
+        transition: 0.2s ease-in-out;
+    }
+
+    .btn-purple {
+        background-color: #ab47bc;
+    }
+
+    .btn-green {
+        background-color: #43a047;
+    }
+
+    .btn-yellow {
+        background-color: #fbc02d;
+        color: #000;
+    }
+
+    .btn-blue {
+        background-color: #29b6f6;
+    }
+
+    .btn-tile:hover {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+
+    .btn-logout {
+        display: inline-block;
+        margin-top: 30px;
+        background-color:purple;
+        color: white;
+        padding: 12px 30px;
+        border-radius: 6px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: 0.2s ease-in-out;
+    }
+
+        .btn-logout:hover {
+            background-color: #C8A2C8;
+        }
+</style>
+
+<div class="admin-wrapper">
+    <!-- Logo -->
+    <div class="logo">
+        <img src="~/img/Logo.png" alt="CMS Logo" />
     </div>
 
-    <div class="row mt-5">
-        <div class="col-md-4 offset-md-4">
-            <a href="/Login/Logout" class="btn btn-danger w-100 py-3">🚪 Logout</a>
-        </div>
+    <!-- Page Title -->
+    <h2 class="dashboard-title">Admin Dashboard</h2>
+
+    <!-- Admin Role Buttons -->
+    <div class="dashboard-buttons">
+        <a href="/Admin/ManageReceptionists" class="btn-tile btn-purple">👩 Receptionists</a>
+        <a href="/Admin/ManageDoctors" class="btn-tile btn-purple">👨‍⚕️ Doctors</a>
+        <a href="/Admin/ManagePharmacists" class="btn-tile btn-purple">💊 Pharmacists</a>
+        <a href="/Admin/ManageLabTechnicians" class="btn-tile btn-purple">🔬 Lab Technicians</a>
     </div>
 
-    
+    <!-- Logout -->
+    <div class="button-container mt-15">
+        <a href="/Account/Logout" class="btn-logout">🚪 Logout</a>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Optional dashboard-specific scripts -->
+}

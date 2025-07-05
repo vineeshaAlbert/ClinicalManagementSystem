@@ -225,7 +225,7 @@ namespace ClinicalManagementSystem.Controllers
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
-            return RedirectToAction("Login", "Login");
+            return RedirectToAction("Logout", "Account");
         }
     }
 }
