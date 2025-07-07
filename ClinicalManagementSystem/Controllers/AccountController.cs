@@ -53,7 +53,7 @@ namespace ClinicalManagementSystem.Controllers
                             return RedirectToAction("Index", "Admin");
 
                         case "receptionist":
-                            return RedirectToAction("Index", "Reception");
+                            return RedirectToAction("Index", "Receptionist");
 
                         case "doctor":
                             return RedirectToAction("TodayAppointments", "Doctor", new { doctorId = user.UserId });

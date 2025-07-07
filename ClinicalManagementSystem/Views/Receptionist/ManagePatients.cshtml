@@ -1,0 +1,102 @@
+﻿@using ClinicalManagementSystem.ViewModel
+@model IEnumerable<PatientViewModel>
+@{
+    ViewBag.Title = "Manage Patients";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2 class="mb-3">Manage Patients</h2>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">@TempData["Message"]</div>
+}
+
+<button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addModal">+ Add Patient</button>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Reference ID</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model)
+        {
+            <tr>
+                <td>@p.PatientId</td>
+                <td>@p.Name</td>
+                <td>@p.Phone</td>
+                <td>@(p.IsActive ? "Active" : "Inactive")</td>
+                <td>
+                    <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal-@p.PatientId">Edit</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Add Patient Modal -->
+<div class="modal fade" id="addModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="AddPatient" method="post">
+                <div class="modal-header"><h5 class="modal-title">Add Patient</h5></div>
+                <div class="modal-body">
+                    <div class="mb-2">
+                        <label>Name</label>
+                        <input name="Name" class="form-control" required />
+                    </div>
+                    <div class="mb-2">
+                        <label>Phone</label>
+                        <input name="Phone" class="form-control" required />
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="IsActive" checked />
+                        <label class="form-check-label">Active</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Save</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@foreach (var p in Model)
+{
+    <div class="modal fade" id="editModal-@p.PatientId" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form asp-action="EditPatient" method="post">
+                    <div class="modal-header"><h5 class="modal-title">Edit Patient</h5></div>
+                    <div class="modal-body">
+                        <input type="hidden" name="PatientId" value="@p.PatientId" />
+                        <div class="mb-2">
+                            <label>Name</label>
+                            <input name="Name" class="form-control" value="@p.Name" required />
+                        </div>
+                        <div class="mb-2">
+                            <label>Phone</label>
+                            <input name="Phone" class="form-control" value="@p.Phone" required />
+                        </div>
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" name="IsActive" @(p.IsActive ? "checked" : "") />
+                            <label class="form-check-label">Active</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success">Update</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
