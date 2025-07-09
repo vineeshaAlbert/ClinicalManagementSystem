@@ -1,117 +1,131 @@
 ﻿@model IEnumerable<ClinicalManagementSystem.Models.Receptionist>
 
-@{
-    ViewBag.Title = "Manage Receptionists";
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Manage Receptionists</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<!-- Google Font -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <!-- Bootstrap + Fonts + Custom CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
 
-<style>
-    body {
-        background: linear-gradient(to bottom right, #f3e5f5, #ce93d8, #ab47bc);
-        font-family: 'Inter', sans-serif;
-        margin: 0;
-        padding: 0;
-    }
+    <style>
+        body {
+            background: linear-gradient(to bottom right, #f3e5f5, #ce93d8, #ab47bc);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
 
-    .logo {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 1000;
-    }
+        .logo {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
 
-    .logo img {
-        max-width: 200px;
-        height: auto;
-    }
+        .logo img {
+            max-width: 200px;
+            height: auto;
+        }
 
-    h2.text-center {
-        color: #4a148c;
-        font-weight: 700;
-        margin-top: 1px;
-        margin-bottom: 30px;
-    }
+        h2.text-center {
+            color: #4a148c;
+            font-weight: 700;
+            margin-top: 1px;
+            margin-bottom: 30px;
+        }
 
-    .table {
-        background-color: transparent;
-    }
+        .table {
+            background-color: transparent;
+        }
 
-    .table th,
-    .table td {
-        border: none !important;
-        background-color: transparent !important;
-        color: #3c0060;
-        text-align: center;
-        vertical-align: middle;
-    }
+        .table th,
+        .table td {
+            border: none !important;
+            background-color: transparent !important;
+            color: #3c0060;
+            text-align: center;
+            vertical-align: middle;
+        }
 
-    .table-hover tbody tr:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-    }
+        .table-hover tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
 
-    .btn {
-        font-weight: 600;
-    }
+        .btn {
+            font-weight: 600;
+        }
 
-    .btn-purple {
-        background-color: #6a1b9a;
-        color: white;
-    }
+        .btn-purple {
+            background-color: #6a1b9a;
+            color: white;
+        }
 
-    .btn-purple:hover {
-        background-color: #4a148c;
-        color: white;
-    }
+        .btn-purple:hover {
+            background-color: #4a148c;
+            color: white;
+        }
 
-    /* Custom Toggle Switch */
-    .toggle-switch {
-        position: relative;
-        display: inline-block;
-        width: 48px;
-        height: 24px;
-    }
+        .modal-header-purple {
+            background-color: #6a1b9a;
+            color: white;
+        }
 
-    .toggle-switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-    }
+        .btn-close-white {
+            filter: invert(1);
+        }
 
-    .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #f8d7da; /* light red */
-        transition: .4s;
-        border-radius: 34px;
-    }
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 24px;
+        }
 
-    .slider:before {
-        position: absolute;
-        content: "";
-        height: 18px;
-        width: 18px;
-        left: 3px;
-        bottom: 3px;
-        background-color: white;
-        transition: .4s;
-        border-radius: 50%;
-    }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
 
-    .toggle-switch input:checked + .slider {
-        background-color: #6a1b9a; /* purple */
-    }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #f8d7da;
+            transition: .4s;
+            border-radius: 34px;
+        }
 
-    .toggle-switch input:checked + .slider:before {
-        transform: translateX(24px);
-    }
-</style>
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        .toggle-switch input:checked + .slider {
+            background-color: #6a1b9a;
+        }
+
+        .toggle-switch input:checked + .slider:before {
+            transform: translateX(24px);
+        }
+    </style>
+</head>
+<body>
 
 <div class="logo">
     <img src="~/img/Logo.png" alt="CMS Logo" />
@@ -175,9 +189,9 @@
                         <div class="modal-content">
                             <form asp-action="EditReceptionist" method="post">
                                 <input type="hidden" name="ReceptionistId" value="@r.ReceptionistId" />
-                                <div class="modal-header bg-warning text-dark">
+                                <div class="modal-header modal-header-purple">
                                     <h5 class="modal-title">Edit Receptionist</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                                 </div>
                                 <div class="modal-body">
                                     <div class="mb-3">
@@ -190,7 +204,7 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button class="btn btn-primary" type="submit">Save Changes</button>
+                                    <button class="btn btn-purple" type="submit">Save Changes</button>
                                     <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
                                 </div>
                             </form>
@@ -207,9 +221,9 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <form asp-action="AddReceptionist" method="post">
-                <div class="modal-header bg-primary text-white">
+                <div class="modal-header modal-header-purple">
                     <h5 class="modal-title">Add Receptionist</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
@@ -222,7 +236,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-success" type="submit">Add</button>
+                    <button class="btn btn-purple" type="submit">Add</button>
                     <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
                 </div>
             </form>
@@ -230,17 +244,21 @@
     </div>
 </div>
 
-@section Scripts {
-    <script>
-        $(document).ready(function () {
-            $('.toggle-active').change(function () {
-                var userId = $(this).data('user-id');
-                var isActive = $(this).is(':checked');
+<!-- Scripts -->
+<script src="~/lib/jquery/jquery.min.js"></script>
+<script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.toggle-active').change(function () {
+            var userId = $(this).data('user-id');
+            var isActive = $(this).is(':checked');
 
-                $.post('/Admin/ToggleStatus', { userId: userId, isActive: isActive })
-                    .done(() => console.log("Status updated"))
-                    .fail(() => alert("Failed to update status."));
-            });
+            $.post('/Admin/ToggleStatus', { userId: userId, isActive: isActive })
+                .done(() => console.log("Status updated"))
+                .fail(() => alert("Failed to update status."));
         });
-    </script>
-}
+    });
+</script>
+
+</body>
+</html>

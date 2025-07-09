@@ -12,7 +12,9 @@
 
     <!-- Bootstrap & CSS -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+   
+    <link href="~/css/site.css" rel="stylesheet" />
+
 
     <!-- Optional: Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
@@ -56,6 +58,7 @@
     <div class="main-wrapper">
         @RenderBody()
     </div>
+    @RenderSection("Styles", required: false)
 
     <div class="footer-mini @(isLoginPage ? "hidden" : "")">
         © 2025 MediCareCMS • Your Health, Our Promise
